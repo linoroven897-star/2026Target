@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OUNIN 2026 工作计划 - 多维表格</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; background: #0d1117; color: #fff; padding: 30px 20px; }
+.container { max-width: 1400px; margin: 0 auto; }
+h1 { font-size: 28px; color: #D4A574; margin-bottom: 8px; }
+.sub { font-size: 13px; color: #888; margin-bottom: 30px; }
+.filters { margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+.filters label { font-size: 13px; color: #aaa; }
+.filters select { background: #1a1f26; color: #fff; border: 1px solid #333; padding: 6px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+.filters button { background: #D4A574; color: #0d1117; border: none; padding: 6px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; }
+.filters button:hover { background: #c4956a; }
+.print-btn { position: fixed; top: 16px; right: 20px; background: #D4A574; color: #0d1117; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: bold; }
+.print-btn:hover { background: #c4956a; }
+@media print { .print-btn, .filters { display: none; } }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 30px; }
+th, td { border: 1px solid #333; padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: #1a1f26; color: #D4A574; font-weight: bold; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
+th.corner { position: sticky; left: 0; z-index: 3; background: #1a1f26; }
+tr:nth-child(even) td { background: #161b22; }
+tr:hover td { background: #1e2733; }
+td { color: #ccc; }
+td.dim { color: #888; font-style: italic; }
+td.check { color: #3fb950; font-weight: bold; }
+td.date { color: #58a6ff; white-space: nowrap; }
+td.amount { color: #D4A574; font-weight: bold; }
+td.high { background: rgba(248,81,73,0.08); }
+td.med { background: rgba(210,153,34,0.08); }
+td.low { background: rgba(88,166,255,0.08); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 1px; }
+.badge-hi { background: rgba(248,81,73,0.2); color: #f85149; }
+.badge-me { background: rgba(210,153,34,0.2); color: #d29922; }
+.badge-lo { background: rgba(88,166,255,0.2); color: #58a6ff; }
+.badge-gr { background: rgba(63,185,80,0.2); color: #3fb950; }
+.section-title { background: #0d1117; color: #D4A574; font-weight: bold; padding: 8px; text-align: center; }
+
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
+.sum-card { background: #161b22; border: 1px solid #333; border-radius: 10px; padding: 18px; text-align: center; }
+.sum-card .val { font-size: 28px; font-weight: bold; color: #D4A574; }
+.sum-card .lab { font-size: 12px; color: #888; margin-top: 4px; }
+
+.milestone-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-top: 30px; }
+.ms-item { background: #161b22; border: 1px solid #333; border-radius: 8px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+.ms-item .ms-date { color: #58a6ff; font-size: 12px; white-space: nowrap; }
+.ms-item .ms-desc { color: #ccc; font-size: 13px; }
+.ms-item .ms-amt { color: #D4A574; font-weight: bold; font-size: 13px; }
+
+.legend { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; font-size: 12px; color: #888; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-hi { background: #f85149; }
+.dot-me { background: #d29922; }
+.dot-lo { background: #58a6ff; }
+.dot-gr { background: #3fb950; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>OUNIN 2026 工作计划 — 多维表格</h1>
+<p class="sub">版本 v1.1 | 制定日期 2026-05-21 | 数据来源：MEMORY.md + target/index.html</p>
+
+<div class="filters">
+  <label>筛选板块：</label>
+  <select id="filter-phase">
+    <option value="all">全部阶段</option>
+    <option value="p1">一阶段：基建收尾（5底-6中）</option>
+    <option value="p2">二阶段：流量启动（6中-7底）</option>
+    <option value="p3">三阶段：转化优化（8-9中）</option>
+    <option value="p4">四阶段：规模化（9底-11月）</option>
+    <option value="p5">五阶段：年末收官（12月）</option>
+  </select>
+  <label>筛选维度：</label>
+  <select id="filter-dim">
+    <option value="all">全部维度</option>
+    <option value="uk">UK站本地化</option>
+    <option value="tax">美国税号</option>
+    <option value="erp">ERP系统</option>
+    <option value="seo">GEO/SEO</option>
+    <option value="social">社媒运营</option>
+    <option value="sales">销售目标</option>
+  </select>
+  <button onclick="filterTable()">应用筛选</button>
+  <button onclick="resetFilter()">重置</button>
+</div>
+
+<div class="summary">
+  <div class="sum-card">
+    <div class="val">5</div>
+    <div class="lab">执行板块</div>
+  </div>
+  <div class="sum-card">
+    <div class="val">33</div>
+    <div class="lab">任务节点</div>
+  </div>
+  <div class="sum-card">
+    <div class="val">5</div>
+    <div class="lab">阶段</div>
+  </div>
+  <div class="sum-card">
+    <div class="val">$41,600+</div>
+    <div class="lab">年度目标（最小）</div>
+  </div>
+</div>
+
+<!-- ========== MAIN TABLE ========== -->
+<table id="mainTable">
+<thead>
+<tr>
+  <th class="corner">维度 / 阶段</th>
+  <th>一阶段<br>基建收尾<br>5底-6中</th>
+  <th>二阶段<br>流量启动<br>6中-7底</th>
+  <th>三阶段<br>转化优化<br>8-9中</th>
+  <th>四阶段<br>规模化<br>9底-11月</th>
+  <th>五阶段<br>年末收官<br>12月</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- UK站点本地化 -->
+<tr class="dim-row" data-dim="uk" data-phase="p1,p2,p3,p4">
+  <td class="section-title" rowspan="7" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;font-weight:bold;">🌐<br>UK站<br>本地化<br><span style="font-size:11px;color:#888">uk.ouninshop.com</span></td>
+</tr>
+<tr data-dim="uk" data-phase="p1">
+  <td class="high">1.1 价格货币切换（$→£）<br><span style="color:#888;font-size:11px">全部产品页显示 £ 价格</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p1">
+  <td class="high">1.2 温度单位转换（°F→°C）<br><span style="color:#888;font-size:11px">产品参数页、详情页切换公制</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p1">
+  <td class="high">1.3 容量/体积单位（qt/oz/inch→L/g/cm）<br><span style="color:#888;font-size:11px">产品规格表全部本地化</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p1">
+  <td class="high">1.4 运费政策（英国本地配送规则）<br><span style="color:#888;font-size:11px">建立 UK 运费表（本土+偏远地区）</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p1">
+  <td class="high">1.5 VAT 标注<br><span style="color:#888;font-size:11px">明确标注含VAT/不含VAT</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p2">
+  <td class="med">1.6 支付方式（Stripe UK / Shopify Payments UK）<br><span style="color:#888;font-size:11px">确认开通英国商户</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="uk" data-phase="p2">
+  <td class="med">1.7 联系信息本地化<br><span style="color:#888;font-size:11px">Footer 改为英国本地联系方式</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+
+<!-- 美国税号申请 -->
+<tr data-dim="tax" data-phase="p1,p2,p3,p4,p5">
+  <td class="section-title" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;" colspan="6">💰<br>美国税号申请</td>
+</tr>
+<tr data-dim="tax" data-phase="p1">
+  <td class="high">2.1 中介筛选（至少3家比价）<br><span style="color:#888;font-size:11px">对比价格$300-$800、时效2-6周、口碑</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="tax" data-phase="p1">
+  <td class="high">2.2 确定申请类型（EIN/EIN+州产品税号）<br><span style="color:#888;font-size:11px">确认所需税号类型</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="tax" data-phase="p1">
+  <td class="high">2.3 材料准备<br><span style="color:#888;font-size:11px">公司文件、EIN申请表格、Pritzker & Napoleon</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="tax" data-phase="p2">
+  <td class="med">2.4 提交申请，跟进进度<br><span style="color:#888;font-size:11px">保持沟通，防止卡件延误</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="tax" data-phase="p3">
+  <td class="med">2.5 税号下发，后台上架<br><span style="color:#888;font-size:11px">Shopify 后台设置税费自动计算</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="tax" data-phase="p3">
+  <td class="med">2.6 TaxJar / Avalara 接入<br><span style="color:#888;font-size:11px">自动化跨州税率计算</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+
+<!-- ERP系统完善 -->
+<tr data-dim="erp" data-phase="p1,p2,p3,p4,p5">
+  <td class="section-title" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;" colspan="6">📦<br>ERP系统完善</td>
+</tr>
+<tr data-dim="erp" data-phase="p1">
+  <td class="high">3.1 现有产品信息清洗<br><span style="color:#888;font-size:11px">产品标题/描述/图片/规格参数录入完整</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="erp" data-phase="p2">
+  <td class="med">3.2 Shopify US站库存绑定<br><span style="color:#888;font-size:11px">库存同步 ERP，跨平台不超卖</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="erp" data-phase="p2">
+  <td class="med">3.3 Shopify UK站库存绑定<br><span style="color:#888;font-size:11px">UK站独立库存管理</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="erp" data-phase="p2">
+  <td class="med">3.4 订单自动归口<br><span style="color:#888;font-size:11px">各平台订单接入 ERP，统一管理状态</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="erp" data-phase="p3">
+  <td class="low">3.5 物流追踪对接<br><span style="color:#888;font-size:11px">发货后自动推送物流单号和追踪链接</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="erp" data-phase="p3">
+  <td class="low">3.6 财务报表模块<br><span style="color:#888;font-size:11px">营收/成本/利润报表可导出</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+
+<!-- GEO/SEO -->
+<tr data-dim="seo" data-phase="p1,p2,p3,p4,p5">
+  <td class="section-title" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;" colspan="6">🔍<br>GEO/SEO</td>
+</tr>
+<tr data-dim="seo" data-phase="p2">
+  <td class="high">4.1 UK 市场关键词调研（Ahrefs/SEMrush）<br><span style="color:#888;font-size:11px">抓英国搜索量前50词，筛选低竞争长尾词</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p2">
+  <td class="high">4.2 US 市场关键词补全<br><span style="color:#888;font-size:11px">查漏补缺，确认产品词+品牌词覆盖完整</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p2">
+  <td class="med">4.3 Blog / Buyer's Guide 创作（英文）<br><span style="color:#888;font-size:11px">每月2篇高质量文章（UK站+US站各1篇）</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p2">
+  <td class="med">4.4 UK站 Meta 信息本地化<br><span style="color:#888;font-size:11px">每个页面独立设置 title/description/keywords</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p3">
+  <td class="med">4.5 Schema Markup 完善<br><span style="color:#888;font-size:11px">Product/Review/FAQ 结构化数据</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p3">
+  <td class="low">4.6 外链建设（Guest Post/HARO/行业目录）<br><span style="color:#888;font-size:11px">建立高质量外链，提升 DA 权重</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="seo" data-phase="p3">
+  <td class="low">4.7 Google Search Console 监控<br><span style="color:#888;font-size:11px">定期检查索引状态，修复爬虫错误</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+
+<!-- 社媒运营 -->
+<tr data-dim="social" data-phase="p1,p2,p3,p4,p5">
+  <td class="section-title" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;" colspan="6">📱<br>社媒运营</td>
+</tr>
+<tr data-dim="social" data-phase="p2">
+  <td class="med">5.1 Instagram 内容计划<br><span style="color:#888;font-size:11px">每周3-5条（产品图/烘焙成品图/UGC/Reels）</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="social" data-phase="p2">
+  <td class="med">5.2 TikTok 短视频运营<br><span style="color:#888;font-size:11px">每周1-2条产品种草/开箱短视频</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="social" data-phase="p2">
+  <td class="med">5.3 YouTube Shorts<br><span style="color:#888;font-size:11px">每月2-4条15-60秒产品演示视频</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="social" data-phase="p3">
+  <td class="low">5.4 Pinterest 优化<br><span style="color:#888;font-size:11px">接入 Rich Pin，发布垂直图片，配合长尾搜索</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="social" data-phase="p3">
+  <td class="low">5.5 社媒外链 UTM 追踪<br><span style="color:#888;font-size:11px">所有社媒链接带 UTM 参数，流量归因</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="social" data-phase="p3">
+  <td class="low">5.6 红人合作（KOL）<br><span style="color:#888;font-size:11px">筛选英美 small makers / 烘焙博主，YouTube开箱/TikTok测评</span></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+
+<!-- 销售目标 -->
+<tr data-dim="sales" data-phase="p1,p2,p3,p4,p5">
+  <td class="section-title" style="position:sticky;left:0;background:#1a1f26;color:#D4A574;" colspan="6">💵<br>销售目标</td>
+</tr>
+<tr data-dim="sales" data-phase="p1">
+  <td class="amount">月销售 $300（~2-3单）</td>
+  <td class="check">✅ 启动准备期验收</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="sales" data-phase="p2">
+  <td class="amount">月销售 $800（~5-8单）</td>
+  <td class="dim"></td>
+  <td class="check">✅ 广告测试期验收</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="sales" data-phase="p3">
+  <td class="amount">月销售 $1,500（~10-15单）</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="check">✅ 扩大投放期验收</td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="sales" data-phase="p3">
+  <td class="amount">月销售 $3,000（~20-30单）</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="check">✅ 自然流量占比>15%</td>
+  <td class="dim"></td>
+</tr>
+<tr data-dim="sales" data-phase="p4">
+  <td class="amount">月销售 $6,000（~40-60单）</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="check">✅ 旺季备战就绪</td>
+</tr>
+<tr data-dim="sales" data-phase="p4">
+  <td class="amount">月销售 $12,000（~80-120单）</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="check">✅ 黑五网一爆发</td>
+</tr>
+<tr data-dim="sales" data-phase="p5">
+  <td class="amount">月销售 $18,000+（~120-180单）</td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="dim"></td>
+  <td class="check">✅ 年度目标完成</td>
+</tr>
+
+</tbody>
+</table>
+
+<h2 style="color:#D4A574;font-size:18px;margin:30px 0 15px;border-left:4px solid #D4A574;padding-left:12px;">🎯 关键里程碑</h2>
+<div class="milestone-list">
+  <div class="ms-item"><span class="ms-date">05-31</span><span class="ms-desc">UK站本地化完成</span></div>
+  <div class="ms-item"><span class="ms-date">06-10</span><span class="ms-desc">税号中介签约</span></div>
+  <div class="ms-item"><span class="ms-date">06-30</span><span class="ms-desc">ERP第一期上线</span><span class="ms-amt">$300</span></div>
+  <div class="ms-item"><span class="ms-date">07-15</span><span class="ms-desc">Google/Facebook 广告投放</span></div>
+  <div class="ms-item"><span class="ms-date">07-31</span><span class="ms-desc">广告测试期验收</span><span class="ms-amt">$800</span></div>
+  <div class="ms-item"><span class="ms-date">08-31</span><span class="ms-desc">扩大投放期验收</span><span class="ms-amt">$1,500</span></div>
+  <div class="ms-item"><span class="ms-date">09-30</span><span class="ms-desc">自然流量占比>15%</span><span class="ms-amt">$3,000</span></div>
+  <div class="ms-item"><span class="ms-date">10-31</span><span class="ms-desc">旺季备战就绪</span><span class="ms-amt">$6,000</span></div>
+  <div class="ms-item"><span class="ms-date">11-30</span><span class="ms-desc">黑五网一爆发</span><span class="ms-amt">$12,000</span></div>
+  <div class="ms-item"><span class="ms-date">12-31</span><span class="ms-desc">年度目标完成</span><span class="ms-amt">$18,000+</span></div>
+</div>
+
+<div class="legend" style="margin-top:30px;">
+  <span><span class="dot dot-hi"></span> 高优先级 — 必须完成</span>
+  <span><span class="dot dot-me"></span> 中优先级 — 重点推进</span>
+  <span><span class="dot dot-lo"></span> 低优先级 — 条件允许完成</span>
+  <span><span class="dot dot-gr"></span> 销售目标节点</span>
+</div>
+
+</div>
+
+<script>
+function filterTable() {
+  const phase = document.getElementById('filter-phase').value;
+  const dim = document.getElementById('filter-dim').value;
+  const rows = document.querySelectorAll('#mainTable tbody tr');
+  rows.forEach(row => {
+    if (row.classList.contains('dim-row')) return;
+    const rowPhase = row.getAttribute('data-phase') || '';
+    const rowDim = row.getAttribute('data-dim') || '';
+    const showPhase = phase === 'all' || rowPhase.split(',').includes(phase);
+    const showDim = dim === 'all' || rowDim === dim;
+    row.style.display = (showPhase && showDim) ? '' : 'none';
+  });
+}
+function resetFilter() {
+  document.getElementById('filter-phase').value = 'all';
+  document.getElementById('filter-dim').value = 'all';
+  filterTable();
+}
+</script>
+</body>
+</html>
