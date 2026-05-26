@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OUNIN 2026 工作计划与目标</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; background: #0d1117; color: #fff; padding: 40px 20px; line-height: 1.6; }
+.container { max-width: 1000px; margin: 0 auto; }
+h1 { font-size: 36px; color: #D4A574; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+h2 { font-size: 22px; color: #D4A574; margin: 40px 0 20px; border-left: 4px solid #D4A574; padding-left: 15px; }
+h3 { font-size: 18px; color: #D4A574; margin: 30px 0 15px; }
+h4 { font-size: 15px; color: #fff; margin: 20px 0 10px; }
+p { margin: 10px 0; color: #ccc; }
+ul, ol { margin: 10px 0 10px 25px; color: #ccc; }
+li { margin: 5px 0; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+th, td { border: 1px solid #333; padding: 10px 14px; text-align: left; }
+th { background: #1a1f26; color: #D4A574; }
+tr:nth-child(even) { background: #161b22; }
+.section { background: #161b22; border-radius: 12px; padding: 25px; margin: 20px 0; border: 1px solid #333; }
+.phase { background: #1a1f26; border-radius: 10px; padding: 20px; margin: 15px 0; border-left: 4px solid; }
+.phase-green { border-color: #3fb950; }
+.phase-yellow { border-color: #d29922; }
+.phase-blue { border-color: #58a6ff; }
+.phase-purple { border-color: #a371f7; }
+.phase-orange { border-color: #f85149; }
+.phase-title { font-size: 17px; font-weight: bold; margin-bottom: 8px; color: #fff; }
+.phase-date { font-size: 12px; color: #888; margin-bottom: 12px; }
+.phase-target { display: inline-block; background: rgba(212,165,116,0.15); border: 1px solid #D4A574; border-radius: 20px; padding: 3px 12px; font-size: 12px; color: #D4A574; margin-top: 8px; }
+.task { background: #0d1117; border-radius: 8px; padding: 12px 15px; margin: 8px 0; border: 1px solid #333; }
+.task-name { font-weight: bold; color: #fff; margin-bottom: 4px; font-size: 14px; }
+.task-desc { font-size: 12px; color: #888; }
+.task产出 { font-size: 12px; color: #3fb950; margin-top: 4px; }
+.milestone { display: inline-block; background: rgba(63,185,80,0.15); border: 1px solid #3fb950; border-radius: 20px; padding: 4px 14px; font-size: 12px; color: #3fb950; margin: 3px; }
+.block { background: rgba(248,81,73,0.1); border: 1px solid #f85149; border-radius: 8px; padding: 15px; margin: 15px 0; }
+.block-title { color: #f85149; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+.block-item { color: #ccc; font-size: 13px; margin: 4px 0; }
+.version { color: #666; font-size: 13px; margin-bottom: 30px; }
+.print-btn { position: fixed; top: 20px; right: 20px; background: #D4A574; color: #0d1117; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; }
+.print-btn:hover { background: #c4956a; }
+@media print { .print-btn { display: none; } body { background: #fff; color: #000; } h1, h2, h3, th, .phase-title { color: #000; } .section, .phase, .task, table, tr:nth-child(even) { background: #fff; border-color: #ccc; } .phase { border-left-color: #999; } }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>OUNIN 2026 工作计划与目标</h1>
+<p class="version">制定日期：2026-05-21 | 版本：v1.1 | 基于 target/index.html 同步</p>
+
+<div class="section">
+<h2>一、当前事项</h2>
+
+<h3>🌐 英国站点（uk.ouninshop.com）</h3>
+<p>现状：已上线（2026-05-19），从 US 站模板复制，内容尚未本地化</p>
+<table>
+<tr><th>节点</th><th>内容</th><th>阶段目标</th></tr>
+<tr><td>1.1</td><td>价格货币切换（$→£）</td><td>全部产品页显示 £ 价格，定价需考虑英国市场策略（覆盖 VAT）</td></tr>
+<tr><td>1.2</td><td>温度单位转换（°F→°C）</td><td>所有产品参数页、详情页切换为公制</td></tr>
+<tr><td>1.3</td><td>容量/体积单位（qt/oz/inch→L/g/cm）</td><td>产品规格表全部本地化</td></tr>
+<tr><td>1.4</td><td>运费政策（英国本地配送规则）</td><td>建立 UK 运费表（本土标准配送 + 偏远地区附加费）</td></tr>
+<tr><td>1.5</td><td>VAT 标注</td><td>明确标注含VAT/不含VAT，避免价格歧义</td></tr>
+<tr><td>1.6</td><td>支付方式（Stripe UK / Shopify Payments UK）</td><td>确认开通英国商户</td></tr>
+<tr><td>1.7</td><td>联系信息本地化</td><td>Footer 改为英国本地联系方式</td></tr>
+</table>
+
+<h3>💰 美国税号申请</h3>
+<p>现状：中介在接触中，价格/资质还未确认</p>
+<table>
+<tr><th>节点</th><th>内容</th><th>阶段目标</th></tr>
+<tr><td>2.1</td><td>中介筛选（至少3家比价）</td><td>对比价格（$300-$800区间）、时效（2-6周）、口碑</td></tr>
+<tr><td>2.2</td><td>确定申请类型（EIN / EIN+州产品税号）</td><td>确认所需税号类型</td></tr>
+<tr><td>2.3</td><td>材料准备</td><td>公司文件、EIN 申请表格、Pritzker & Napoleon 表格</td></tr>
+<tr><td>2.4</td><td>提交申请，跟进进度</td><td>保持沟通，防止卡件延误</td></tr>
+<tr><td>2.5</td><td>税号下发，后台上架</td><td>Shopify 后台设置税费自动计算</td></tr>
+<tr><td>2.6</td><td>TaxJar / Avalara 接入</td><td>自动化跨州税率计算</td></tr>
+</table>
+
+<h3>📦 ERP系统完善</h3>
+<p>现状：框架在用，但产品信息不完整，未绑定平台数据</p>
+<table>
+<tr><th>节点</th><th>内容</th><th>阶段目标</th></tr>
+<tr><td>3.1</td><td>现有产品信息清洗</td><td>产品标题/描述/图片/规格参数录入完整</td></tr>
+<tr><td>3.2</td><td>Shopify US站库存绑定</td><td>库存同步到 ERP，跨平台不超卖</td></tr>
+<tr><td>3.3</td><td>Shopify UK站库存绑定</td><td>UK站独立库存管理</td></tr>
+<tr><td>3.4</td><td>订单自动归口</td><td>各平台订单接入 ERP，统一管理状态</td></tr>
+<tr><td>3.5</td><td>物流追踪对接</td><td>发货后自动推送物流单号和追踪链接到买家邮箱</td></tr>
+<tr><td>3.6</td><td>财务报表模块</td><td>营收/成本/利润报表可导出</td></tr>
+</table>
+
+<h3>🔍 GEO/SEO</h3>
+<p>现状：技术环境已优化（Hreflang已嵌入，CF Pages已部署），内容创作是瓶颈</p>
+<table>
+<tr><th>节点</th><th>内容</th><th>阶段目标</th></tr>
+<tr><td>4.1</td><td>UK 市场关键词调研（Ahrefs/SEMrush）</td><td>抓英国搜索量前50的烤箱相关词，筛选低竞争长尾词</td></tr>
+<tr><td>4.2</td><td>US 市场关键词补全</td><td>查漏补缺，确认产品词+品牌词覆盖完整</td></tr>
+<tr><td>4.3</td><td>Blog / Buyer's Guide 创作（英文）</td><td>每月2篇高质量文章</td></tr>
+<tr><td>4.4</td><td>UK站 Meta 信息本地化</td><td>每个页面独立设置 title/description/keywords</td></tr>
+<tr><td>4.5</td><td>Schema Markup 完善</td><td>Product/Review/FAQ 结构化数据，提升 Google 呈现效果</td></tr>
+<tr><td>4.6</td><td>外链建设（Guest Post/HARO/行业目录）</td><td>建立高质量外链，提升 DA 权重</td></tr>
+<tr><td>4.7</td><td>Google Search Console 监控</td><td>定期检查索引状态，修复爬虫错误</td></tr>
+</table>
+
+<h3>📱 社媒运营</h3>
+<p>现状：账号已建立，内容创作和链接接入待推进</p>
+<table>
+<tr><th>节点</th><th>内容</th><th>阶段目标</th></tr>
+<tr><td>5.1</td><td>Instagram 内容计划</td><td>每周3-5条（产品图/烘焙成品图/UGC/Reels）</td></tr>
+<tr><td>5.2</td><td>TikTok 短视频运营</td><td>每周1-2条产品种草/开箱短视频</td></tr>
+<tr><td>5.3</td><td>YouTube Shorts</td><td>每月2-4条15-60秒产品演示视频</td></tr>
+<tr><td>5.4</td><td>Pinterest 优化</td><td>接入 Rich Pin，发布垂直图片，配合长尾搜索流量</td></tr>
+<tr><td>5.5</td><td>社媒外链 UTM 追踪</td><td>所有社媒链接带 UTM 参数，流量归因到具体平台/内容</td></tr>
+<tr><td>5.6</td><td>红人合作（KOL）</td><td>筛选英美 small makers / 烘焙博主，YouTube 开箱/TikTok 测评</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>二、后续计划（按阶段）</h2>
+
+<div class="phase phase-green">
+<div class="phase-title">🟢 第一阶段：基建收尾（5月底 — 6月中）</div>
+<div class="phase-date">目标：在不增加新平台的情况下，把现有站点的标准化做完</div>
+<table>
+<tr><th>时间</th><th>任务</th><th>产出</th></tr>
+<tr><td>5月底</td><td>UK站价格/单位本地化（1.1-1.3）</td><td>UK站本地化完毕</td></tr>
+<tr><td>5月底</td><td>UK站运费+VAT标注（1.4-1.5）</td><td>UK站完整可购买</td></tr>
+<tr><td>6月初</td><td>税号中介签约确认（2.1）</td><td>确定合作方</td></tr>
+<tr><td>6月初</td><td>ERP产品信息清洗（3.1）</td><td>ERP库存数据完整</td></tr>
+<tr><td>6月中</td><td>UK站支付方式配置（1.6）</td><td>Shopify Payments UK 开通</td></tr>
+<tr><td>6月中</td><td>税号材料提交（2.3）</td><td>提交申请，跟进中</td></tr>
+</table>
+<div class="phase-target">🎯 6月底验收：月销售 $300（~2-3单）</div>
+</div>
+
+<div class="phase phase-yellow">
+<div class="phase-title">🟡 第二阶段：流量启动（6月中 — 7月底）</div>
+<div class="phase-date">目标：付费+自然流量同步启动，开始有稳定订单</div>
+<table>
+<tr><th>时间</th><th>任务</th><th>产出</th></tr>
+<tr><td>6月中</td><td>Google Ads 搜索广告 US（品牌词+产品词）</td><td>测试投放，CV< $30</td></tr>
+<tr><td>6月中</td><td>Facebook/Instagram 再营销广告</td><td>触达已访问未购买用户</td></tr>
+<tr><td>6月底</td><td>UK站 SEO 文章（2篇）</td><td>开始获取英国自然流量</td></tr>
+<tr><td>6月底</td><td>ERP 库存+订单同步（3.2-3.4）</td><td>运营效率提升</td></tr>
+<tr><td>7月初</td><td>US站 SEO 文章（2篇）</td><td>提升 US 自然排名</td></tr>
+<tr><td>7月中</td><td>社媒内容发布计划制定（SOP + 内容日历）</td><td>社媒运营流程化、可持续</td></tr>
+<tr><td>7月底</td><td>TaxJar/Avalara 接入（2.6）</td><td>税费自动计算</td></tr>
+</table>
+<div class="phase-target">🎯 7月底验收：月销售 $800（~5-8单）</div>
+</div>
+
+<div class="phase phase-blue">
+<div class="phase-title">🔵 第三阶段：转化优化（8月 — 9月中）</div>
+<div class="phase-date">目标：降低获客成本，提高 ROI，建立用户沉淀</div>
+<table>
+<tr><th>时间</th><th>任务</th><th>产出</th></tr>
+<tr><td>8月初</td><td>SEO 关键词排名监控（前3页目标10词）</td><td>自然流量占比>30%</td></tr>
+<tr><td>8月中</td><td>再营销漏斗完善（弃购召回/追加销售）</td><td>转化率提升20%</td></tr>
+<tr><td>8月中</td><td>UTM 数据复盘，优化广告素材</td><td>降低 CPC，提高 ROAS</td></tr>
+<tr><td>8月底</td><td>ERP 财务+客服模块上线（3.5-3.6）</td><td>报表可导出，客服响应提速</td></tr>
+<tr><td>9月初</td><td>邮件营销自动化（欢迎系列/弃购系列）</td><td>用户复购率提升</td></tr>
+<tr><td>9月中</td><td>红人合作（YouTube开箱/TikTok测评各1个）</td><td>品牌曝光+高质量外链</td></tr>
+</table>
+<div class="phase-target">🎯 8月底验收：月销售 $1,500（~10-15单）</div>
+<div class="phase-target">🎯 9月底验收：月销售 $3,000（~20-30单），自然流量占比>15%</div>
+</div>
+
+<div class="phase phase-purple">
+<div class="phase-title">🟣 第四阶段：规模化（9月底 — 11月）</div>
+<div class="phase-date">目标：旺季爆发，建立品牌护城河</div>
+<table>
+<tr><th>时间</th><th>任务</th><th>产出</th></tr>
+<tr><td>9月底</td><td>Google/Facebook 广告预算扩量</td><td>月花费 $2,000-$3,000，ROAS>3x</td></tr>
+<tr><td>10月初</td><td>TikTok 广告测试</td><td>针对 Z 世代/千禧一代，预算 $200-$300</td></tr>
+<tr><td>10月中</td><td>黑色星期五营销规划（提前3周准备）</td><td>制定促销方案、倒计时 LP、折扣码</td></tr>
+<tr><td>10月底</td><td>库存与物流准备（热销品备货 2-3 倍）</td><td>旺季不发愁</td></tr>
+<tr><td>11月初</td><td>黑五网一执行（全站 20-30% 折扣）</td><td>黑五当日 > $3,000</td></tr>
+<tr><td>11月底</td><td>圣诞新年促销跟进</td><td>礼盒套装、节日专属折扣码</td></tr>
+</table>
+<div class="phase-target">🎯 10月底验收：月销售 $6,000（~40-60单），旺季备战就绪</div>
+<div class="phase-target">🎯 11月底验收：月销售 $12,000（~80-120单），黑五网一爆发</div>
+</div>
+
+<div class="phase phase-orange">
+<div class="phase-title">🎉 第五阶段：年末收官（12月）</div>
+<div class="phase-date">目标：年度目标完成</div>
+<table>
+<tr><th>时间</th><th>任务</th><th>产出</th></tr>
+<tr><td>12月初</td><td>圣诞新年促销持续</td><td>礼盒套装、节日专属折扣码</td></tr>
+<tr><td>12月中</td><td>年度复盘</td><td>收集全年数据，分析各渠道 ROI</td></tr>
+<tr><td>12月底</td><td>2027 年预算规划</td><td>新年预算、新渠道测试、产品线扩展</td></tr>
+</table>
+<div class="phase-target">🎯 12月底验收：月销售 $18,000+（~120-180单），年度目标完成</div>
+</div>
+</div>
+
+<div class="section">
+<h2>三、关键里程碑</h2>
+<table>
+<tr><th>日期</th><th>里程碑</th></tr>
+<tr><td>2026-05-31</td><td>UK站本地化完成（价格/单位/VAT/运费）</td></tr>
+<tr><td>2026-06-10</td><td>税号中介签约，材料提交</td></tr>
+<tr><td>2026-06-30</td><td>ERP第一期上线 + 月销售 $300</td></tr>
+<tr><td>2026-07-15</td><td>Google Ads + Facebook 广告正式投放</td></tr>
+<tr><td>2026-07-31</td><td>月销售 $800（广告测试期验收）</td></tr>
+<tr><td>2026-08-31</td><td>月销售 $1,500（扩大投放期验收）</td></tr>
+<tr><td>2026-09-30</td><td>月销售 $3,000，自然流量占比>15%</td></tr>
+<tr><td>2026-10-31</td><td>月销售 $6,000，旺季备战就绪</td></tr>
+<tr><td>2026-11-30</td><td>月销售 $12,000，黑五网一爆发</td></tr>
+<tr><td>2026-12-31</td><td>月销售 $18,000+，年度目标完成</td></tr>
+</table>
+
+<h3>年度收入目标</h3>
+<span class="milestone">6月 $300</span>
+<span class="milestone">7月 $800</span>
+<span class="milestone">8月 $1,500</span>
+<span class="milestone">9月 $3,000</span>
+<span class="milestone">10月 $6,000</span>
+<span class="milestone">11月 $12,000</span>
+<span class="milestone">12月 $18,000+</span>
+<span class="milestone" style="background:rgba(212,165,116,0.15);border-color:#D4A574;color:#D4A574;">全年 $41,600+</span>
+</div>
+
+
+</div>
+</body>
+</html>
